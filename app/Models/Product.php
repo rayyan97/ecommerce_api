@@ -38,4 +38,16 @@ class Product extends Model
     {
         return $this->hasMany(Size::class);
     }
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable')->withTimestamps();
+    }
 }

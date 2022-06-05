@@ -26,8 +26,7 @@ class ProductController extends Controller
             $lang = 'en';
         }
         $request->lang = $lang;
-        //dd(Product::all());
-        return ResourcesProduct::collection(Product::with('sizes')->get());
+        return ResourcesProduct::collection(Product::with('sizes', 'ratings', 'category', 'tags')->get());
     }
 
     /**

@@ -3,6 +3,10 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\Size as ProductSize;
+use App\Http\Resources\Category as CategoryResource;
+use App\Http\Resources\Tag as TagResource;
+use App\Models\Category;
 
 class Product extends JsonResource
 {
@@ -20,10 +24,10 @@ class Product extends JsonResource
             'product_name' => $this->{'product_name_' . $request->lang},
             'description' => $this->{'description_' . $request->lang},
             'price' => $this->price,
-            'size' => [
-                'id' => $this->sizes->id,
-                'size' => $this->sizes->size
-            ]
+            'available_sizes' => ($this->size_applicable == 1) ? $this->sizes : null,
+            'rating' => (count($this->ratings) > 0) ? round($this->ratings->sum('rating') / count($this->ratings), 2) : null,
+            'category' => new CategoryResource($this->whenLoaded('category')),
+            'tags' => $this->tags
         ];
     }
 }
