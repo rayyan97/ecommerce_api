@@ -3,11 +3,10 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Traits\CheckLang;
+use App\Http\Resources\Product as ProductResource;
 
-class Category extends JsonResource
+class CartProducts extends JsonResource
 {
-    use CheckLang;
     /**
      * Transform the resource into an array.
      *
@@ -18,7 +17,10 @@ class Category extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->{'category_name_' . $this->checkLang($request)}
+            'user_id' => $this->user_id,
+            'quantity' => $this->quantity,
+            'total_price' => $this->quantity * $this->price,
+            'product' => ProductResource::collection($this->whenLoaded('products'))
         ];
     }
 }

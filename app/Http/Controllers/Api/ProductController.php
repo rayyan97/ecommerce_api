@@ -17,15 +17,8 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $header = $request->header('lang');
-        $languages = collect(Language::get())->pluck('lang_code');
 
-        if (in_array($header, $languages->toArray())) {
-            $lang = $header;
-        } else {
-            $lang = 'en';
-        }
-        $request->lang = $lang;
+        //$request->lang = $this->checkLang($request);
         return ResourcesProduct::collection(Product::with('sizes', 'ratings', 'category', 'tags')->get());
     }
 

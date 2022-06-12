@@ -1,5 +1,6 @@
 <?php
 
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,5 +20,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix('v1')->namespace('App\Http\Controllers\Api')->group(function () {
+    Route::post('register', [App\Http\Controllers\Api\RegisterController::class, 'register']);
+    Route::post('login',  [App\Http\Controllers\Api\RegisterController::class, 'login']);
+
     Route::apiResource('product', ProductController::class);
+    Route::apiResource('cart', CartController::class)->middleware('auth:sanctum');
+    //Route::get('cart/total', [CartController::class, 'CartTotal'])->middleware('auth:sanctum');
 });
