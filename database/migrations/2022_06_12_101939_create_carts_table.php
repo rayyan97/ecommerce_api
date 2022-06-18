@@ -19,7 +19,7 @@ class CreateCartsTable extends Migration
             $table->foreign('product_id')->references('products')->on('id')->onDelete('cascade');
             $table->unsignedInteger('user_id')->index();
             $table->foreign('user_id')->references('users')->on('id')->onDelete('cascade');
-            $table->float('quantity');
+            $table->unsignedInteger('quantity');
             $table->float('price');
             $table->float('total')->nullable();
             $table->timestamps();

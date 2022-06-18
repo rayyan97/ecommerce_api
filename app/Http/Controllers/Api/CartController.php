@@ -19,11 +19,7 @@ class CartController extends Controller
     public function index()
     {
         $data = CartProducts::collection(Cart::where('user_id', Auth::user()->id)->with('products')->get());
-        //dd(typeOf($data));
-        $total_cart['total_cart'] = 0.0;
-        foreach ($data as $key => $value) {
-            $total_cart['total_cart'] = round($total_cart['total_cart'] + ($value['quantity'] * $value['price']), 2);
-        }
+        $total_cart['total_cart'] = $this->CartTotal($data);
         $data->additional($total_cart);
 
         return $data;
@@ -96,10 +92,37 @@ class CartController extends Controller
      */
     public function destroy(Cart $cart)
     {
-        //
+        $cart->delete();
+        $data['data'][0] = $cart;
+        return $data;
     }
-    // public function CartTotal()
-    // {
-    //     $data['data']['cart_total'] = Cart::where('user_id',Auth::user()->id)->sum('')
-    // }
+    public function CartTotal($data = null)
+    {
+
+        $data = $data ?? Cart::where('user_id', Auth::user()->id)->get();
+        $total_cart['total_cart'] = 0.0;
+        foreach ($data as $key => $value) {
+            $total_cart['total_cart'] = round($total_cart['total_cart'] + ($value['quantity'] * $value['price']), 2);
+        }
+        return $total_cart['total_cart'];
+    }
+
+    public function increaseQuantity($id)
+    {
+        $cart = Cart::findorfail($id);
+        $increament = $cart->increment('quantity');
+        $data['data'][0]['product_total'] =  round($cart->quantity *  $cart->price, 2);
+        $total = $this->CartTotal();
+        $data['data'][0]['cart_total'] = $total;
+        return $data;
+    }
+    public function decreaseQuantity($id)
+    {
+        $cart = Cart::findorfail($id);
+        $increament = $cart->decrement('quantity');
+        $data['data'][0]['product_total'] =  round($cart->quantity *  $cart->price, 2);
+        $total = $this->CartTotal();
+        $data['data'][0]['cart_total'] = $total;
+        return $data;
+    }
 }
