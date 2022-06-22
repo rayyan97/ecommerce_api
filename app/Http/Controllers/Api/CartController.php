@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Models\Cart;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CouponVerify;
 use App\Http\Requests\StoreCart;
 use App\Http\Resources\CartProducts;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
@@ -124,5 +126,25 @@ class CartController extends Controller
         $total = $this->CartTotal();
         $data['data'][0]['cart_total'] = $total;
         return $data;
+    }
+
+    public function verifyCoupon(CouponVerify $request)
+    {
+        $input = $request->validated();
+
+        try {
+            $voucher = auth()->user()->redeemCode($input['code']);
+            $total = $this->CartTotal();
+            $data['data']['message'] = 'Coupon Added Successfully';
+            $data['data']['code'] = 200;
+            $data['data']['discount_percent'] = $voucher->data->get('discount_percent');
+            $data['data']['discount_price'] = round($total * ($voucher->data->get('discount_percent') / 100), 2);
+            $data['data']['updated_cart_total'] = round(($total - $data['data']['discount_price']), 2);
+            return response()->json($data);
+        } catch (\Exception $ex) {
+            $data['data']['message'] = $ex->getMessage();
+            $data['data']['code'] = 500;
+            return response()->json($data);
+        }
     }
 }
