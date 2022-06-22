@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Database\Factories\ProductFactory;
 use Illuminate\Database\Seeder;
 
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -21,7 +22,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             LanguageSeeder::class,
             TagSeeder::class,
-            ProductSeeder::class
+            ProductSeeder::class,
+            VoucherSeeder::class,
         ]);
     }
 }
