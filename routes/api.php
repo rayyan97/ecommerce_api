@@ -30,5 +30,6 @@ Route::prefix('v1')->namespace('App\Http\Controllers\Api')->group(function () {
         Route::get('cart/increase/{id}', [App\Http\Controllers\Api\CartController::class, 'increaseQuantity']);
         Route::get('cart/decrease/{id}', [App\Http\Controllers\Api\CartController::class, 'decreaseQuantity']);
         Route::post('cart/coupon', [App\Http\Controllers\Api\CartController::class, 'verifyCoupon']);
+        Route::get('pdfbill', [App\Http\Controllers\Api\CartController::class, 'generateBill']);
     });
 });
