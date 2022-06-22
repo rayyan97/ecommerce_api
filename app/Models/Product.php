@@ -6,12 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Cviebrock\EloquentSluggable\Sluggable;
-// use Carbon\Carbon;
-// use BeyondCode\Vouchers\Facades\Vouchers;
+use BeyondCode\Vouchers\Traits\HasVouchers;
 
 class Product extends Model
 {
-    use HasFactory, SoftDeletes, Sluggable;
+    use HasFactory, SoftDeletes, Sluggable, HasVouchers;
 
 
     /**
@@ -52,17 +51,4 @@ class Product extends Model
     {
         return $this->morphToMany(Tag::class, 'taggable')->withTimestamps();
     }
-
-
-    // //************* voucher method */
-    // /**
-    //  * @param int $amount
-    //  * @param array $data
-    //  * @param null $expires_at
-    //  * @return Voucher[]
-    //  */
-    // public function createVouchers(int $amount, array $data = [], $expires_at = null)
-    // {
-    //     return Vouchers::create($this, $amount, $data, $expires_at);
-    // }
 }
